@@ -1,3 +1,7 @@
 <Solution>
+  <Project Path="../d01ApiV2.Common/d01ApiV2.Common.csproj" />
+  <Project Path="../d01ApiV2.DbFactory/d01ApiV2.DbFactory.csproj" />
+  <Project Path="../d01ApiV2.Model/d01ApiV2.Model.csproj" />
+  <Project Path="../d01ApiV2.Repository/d01ApiV2.Repository.csproj" />
   <Project Path="d01ApiV2.csproj" />
 </Solution>
