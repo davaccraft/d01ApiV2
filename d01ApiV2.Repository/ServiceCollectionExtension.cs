@@ -1,4 +1,8 @@
 ﻿using System;
+using d01ApiV2.Repository.Implementation.Profile;
+using d01ApiV2.Repository.Implementation.Shared;
+using d01ApiV2.Repository.Interface.Profile;
+using d01ApiV2.Repository.Interface.Shared;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace d01ApiV2.Repository
@@ -15,12 +19,11 @@ namespace d01ApiV2.Repository
             // service.AddScoped<IOtherRepository, OtherRepository>();
 
             #region Main
-            //service.AddTransient<ISharedRepository, SharedRepository>();
-            //service.AddTransient<IDashboardRepository, DashboardRepository>();
+            service.AddTransient<ISharedRepository, SharedRepository>();
             #endregion Main
 
             #region Profile
-            //service.AddTransient<IBrandRepository, BrandRepository>();
+            service.AddTransient<IBrandRepository, BrandRepository>();
             #endregion Profile
 
             #region Transaction

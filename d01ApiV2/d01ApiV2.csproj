@@ -16,4 +16,10 @@
     <Folder Include="Controllers\Report\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\d01ApiV2.Common\d01ApiV2.Common.csproj" />
+    <ProjectReference Include="..\d01ApiV2.Model\d01ApiV2.Model.csproj" />
+    <ProjectReference Include="..\d01ApiV2.Repository\d01ApiV2.Repository.csproj" />
+  </ItemGroup>
+
 </Project>
