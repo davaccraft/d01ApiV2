@@ -8,7 +8,9 @@ namespace d01ApiV2.Common.Constant
     {
         public const string ModuleGetList = "[dbo].[GetModuleList]";
         public const string GetModuleGroupsAndModules = "[dbo].[GetModuleGroupsAndModules]";
-
+        
+        
+        public const string GetComponents = "[dbo].[GetComponents]";
 
         #region Generic/Shared
         public const string GetPageComponents = "[dbo].[GetPageComponents]";

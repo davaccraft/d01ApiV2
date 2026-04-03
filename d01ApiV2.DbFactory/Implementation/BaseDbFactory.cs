@@ -103,5 +103,24 @@ namespace d01ApiV2.DbFactory.Implementation
             }
         }
 
+        public async Task<Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>, T6>> ExecuteQueryMultipleReturnAsync<T1, T2, T3, T4, T5, T6>(string storedprocedure, object parameter)
+        {
+            using (var conn = _dbConnection)
+            {
+                using (var multiResult = await conn.QueryMultipleAsync(storedprocedure, parameter, commandType: CommandType.StoredProcedure).ConfigureAwait(false))
+                {
+                    return new Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>, T6>(
+                            await multiResult.ReadAsync<T1>().ConfigureAwait(false),
+                            await multiResult.ReadAsync<T2>().ConfigureAwait(false),
+                            await multiResult.ReadAsync<T3>().ConfigureAwait(false),
+                            await multiResult.ReadAsync<T4>().ConfigureAwait(false),
+                            await multiResult.ReadAsync<T5>().ConfigureAwait(false),
+                            await multiResult.ReadSingleAsync<T6>().ConfigureAwait(false)
+                        );
+
+                }
+            }
+        }
+
     }
 }

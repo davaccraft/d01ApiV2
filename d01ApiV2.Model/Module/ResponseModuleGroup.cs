@@ -1,5 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿using d01ApiV2.Model.Component;
+using System.Text.Json.Serialization;
 
+/*
 namespace d01ApiV2.Model.Module
 {
     public class ResponseModuleGroup
@@ -16,6 +18,7 @@ namespace d01ApiV2.Model.Module
         public string ModuleGroupIcon { get; set; }
 
         [JsonPropertyName("module_group_modules")]
-        public List<ResponseModule> ModuleGroupModules { get; set; }
+        public List<ResponseMenu> ModuleGroupModules { get; set; }
     }
 }
+//*/

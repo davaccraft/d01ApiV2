@@ -1,6 +1,7 @@
 ﻿using d01ApiV2.Common.Constant;
 using d01ApiV2.DbFactory.Interface;
 using d01ApiV2.Model;
+using d01ApiV2.Model.Dto;
 using d01ApiV2.Model.Grid;
 using d01ApiV2.Model.Grid.Profile;
 using d01ApiV2.Model.Request;
@@ -35,7 +36,7 @@ namespace d01ApiV2.Repository.Implementation.Profile
                 Parameter = dt.AsTableValuedParameter("dbo.UDTTParameter")
             };
 
-            var result = await _appDbFactory.ExecuteQueryMultipleReturnAsync<DbReturnColumnHeader, DbReturnRowBrand, DbReturnPagination, DbReturnInfo>(StoredProcedure.PaginateBrand, parameter).ConfigureAwait(false);
+            var result = await _appDbFactory.ExecuteQueryMultipleReturnAsync<DbReturnColumnHeader, DbReturnRowBrand, DbReturnPagination, ResultDto>(StoredProcedure.PaginateBrand, parameter).ConfigureAwait(false);
 
             var dataColumnHeaders = result.Item1
                 .Select((row, index) => new ResponseColumnHeader

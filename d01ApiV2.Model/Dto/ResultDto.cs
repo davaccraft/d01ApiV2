@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace d01ApiV2.Model
+namespace d01ApiV2.Model.Dto
 {
-    public class DbReturnInfo
+    public class ResultDto
     {
         [JsonPropertyName("result_code")]
         public string ReturnCode { get; set; }

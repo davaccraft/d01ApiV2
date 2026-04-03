@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace d01ApiV2.Model.Module
+namespace d01ApiV2.Model.Component
 {
-    public class ResponseModule
+    public class ResponseMenu
     {
         [JsonPropertyName("order_no")]
         public int OrderNo { get; set; }

@@ -1,4 +1,5 @@
-﻿namespace d01ApiV2.Model.Module
+﻿/*
+namespace d01ApiV2.Model.Module
 {
     public class DbReturnModuleGroupAndModule
     {
@@ -17,3 +18,4 @@
         public int IsReadOnly { get; set; }
     }
 }
+//*/

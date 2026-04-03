@@ -28,6 +28,7 @@ namespace d01ApiV2.Controllers.Profile
 
 
         #region Test
+        /*
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> GetPageComponentTest()
@@ -56,6 +57,7 @@ namespace d01ApiV2.Controllers.Profile
 
             return Ok(await _sharedRepository.GetAdvanceSearchComponents<ResponseDataComponents>(request));
         }
+        //*/
 
         /*
         [HttpGet]
@@ -91,5 +93,22 @@ namespace d01ApiV2.Controllers.Profile
         }
         //*/
         #endregion Test
+
+        #region Public Methods
+        /*
+        [HttpGet("AdvanceSearchComponents")]
+        public async Task<IActionResult> PageComponents()
+        {
+            RequestKeyValue request = new RequestKeyValue();
+
+            request.Parameters.Add("ModuleCode", ModuleCode.BRAND);
+            request.Parameters.Add("CompanyId", Guid.Empty.ToString());
+            request.Parameters.Add("UserId", Guid.Empty.ToString());
+
+            return Ok(await _sharedRepository.GetPageComponents<ResponseDataComponents>(request));
+
+        }
+        //*/
+        #endregion Public Methods
     }
 }

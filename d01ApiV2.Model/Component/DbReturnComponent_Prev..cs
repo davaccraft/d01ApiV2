@@ -4,7 +4,7 @@ using System.Text;
 
 namespace d01ApiV2.Model.Component
 {
-    public class DbReturnComponent
+    public class DbReturnComponent_Prev
     {
         public short DisplayOrderNo { get; set; } //tinyint,
 

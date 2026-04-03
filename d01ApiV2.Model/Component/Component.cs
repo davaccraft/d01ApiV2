@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace d01ApiV2.Model.Component
 {
-    public class ResponseComponent
+    public class Component
     {
         [JsonPropertyName("module_code")]
         public string ModuleCode { get; set; }
@@ -94,13 +94,13 @@ namespace d01ApiV2.Model.Component
         [JsonPropertyName("is_required")]
         public int IsRequired { get; set; }
 
-        [JsonPropertyName("column_group_no")]
-        public int ColumnGroupNo { get; set; }
+        //[JsonPropertyName("column_group_no")]
+        //public int ColumnGroupNo { get; set; }
         
-        [JsonPropertyName("is_allow_sort")]
-        public int IsAllowSort { get; set; }
+        //[JsonPropertyName("is_allow_sort")]
+        //public int IsAllowSort { get; set; }
 
-        [JsonPropertyName("is_ascending")]
-        public int IsAscending { get; set; }
+        //[JsonPropertyName("is_ascending")]
+        //public int IsAscending { get; set; }
     }
 }
