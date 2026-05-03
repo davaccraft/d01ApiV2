@@ -20,7 +20,7 @@ namespace d01ApiV2.Common.Constant
         #region Profile
         //public const string GETITEM = "getItemById";
         ////public const string GETBRAND = "getBrandById";
-        //public const string GETBRAND = "[dbo].[GetBrand]";
+        public const string GetBrand = "[dbo].[GetBrand]";
         //public const string SAVEBRAND = "[dbo].[SaveBrand]";
         public const string PaginateBrand = "[dbo].[PaginateBrand]";
         //public const string PageObjectBrand = "[dbo].[PageObjectBrand]"; -- use the PageObject

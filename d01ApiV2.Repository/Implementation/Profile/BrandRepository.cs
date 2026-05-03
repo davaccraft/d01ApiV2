@@ -4,10 +4,12 @@ using d01ApiV2.Model;
 using d01ApiV2.Model.Dto;
 using d01ApiV2.Model.Grid;
 using d01ApiV2.Model.Grid.Profile;
+using d01ApiV2.Model.Profile;
 using d01ApiV2.Model.Request;
 using d01ApiV2.Repository.Interface.Profile;
 using Dapper;
 using System.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace d01ApiV2.Repository.Implementation.Profile
 {
@@ -266,27 +268,46 @@ namespace d01ApiV2.Repository.Implementation.Profile
         //Get Single Data
         public async Task<ApiResponse<T>> Get<T>(RequestKeyValue request)
         {
-            throw new NotImplementedException();
+            var dt = new DataTable();
+            dt.Columns.Add("Key", typeof(string));
+            dt.Columns.Add("Value", typeof(string));
+
+            foreach (var entry in request.Parameters)
+            {
+                dt.Rows.Add(entry.Key, entry.Value);
+            }
+
+            var parameter = new
+            {
+                Parameter = dt.AsTableValuedParameter("dbo.UDTTParameter")
+            };
+
+            var result = await _appDbFactory.ExecuteQueryMultipleReturnAsync<ProfileDto, ResultDto>(StoredProcedure.GetBrand, parameter).ConfigureAwait(false);
+
+            var detailDatas = result.Item1.Select(d => new ProfileData
+            {
+                DisplayOrderNo = d.DisplayOrderNo,
+                // Convert GUIDs to strings as required by your Profile model
+                InfoId = d.InfoId.ToString(),
+                TemplateId = d.TemplateId.ToString(),
+                InternalCode = d.InternalCode,
+                Value = d.Value ?? ""
+            }).ToList();
 
 
-            //var dt = new DataTable();
-            //dt.Columns.Add("Key", typeof(string));
-            //dt.Columns.Add("Value", typeof(string));
+            var responseData = new DetailPageData
+            {
+                Details = detailDatas
+            };
 
-            //foreach (var entry in request.Parameters)
-            //{
-            //    dt.Rows.Add(entry.Key, entry.Value);
-            //}
+            ApiResponse<DetailPageData> resultData = new ApiResponse<DetailPageData>
+            {
+                Data = responseData,
+                ReturnCode = result.Item2.ReturnCode,
+                ReturnMessage = result.Item2.ReturnMessage
+            };
 
-            //var parameter = new
-            //{
-            //    Parameter = dt.AsTableValuedParameter("dbo.UDTTParameter")
-            //};
-
-            //MPD.OPEN
-            //2 tables to received
-            //- Brand
-            //- BrandInfo
+            return (ApiResponse<T>)(object)resultData;
         }
 
 

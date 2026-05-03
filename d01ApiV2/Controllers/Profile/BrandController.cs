@@ -1,6 +1,7 @@
 ﻿using d01ApiV2.Common.Constant;
 using d01ApiV2.Model.Component;
 using d01ApiV2.Model.Grid;
+using d01ApiV2.Model.Profile;
 using d01ApiV2.Model.Request;
 using d01ApiV2.Repository.Interface.Profile;
 using d01ApiV2.Repository.Interface.Shared;
@@ -41,6 +42,18 @@ namespace d01ApiV2.Controllers.Profile
             return Ok(await _repository.Paginate<ResponseDataGrid>(request));
         }
 
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetDataTest()
+        {
+            RequestKeyValue request = new RequestKeyValue();
+
+            request.Parameters.Add("CompanyId", "B71ECEEE-F966-4AF8-84BD-4C1074449171");
+            request.Parameters.Add("UserId", Guid.Empty.ToString());
+            request.Parameters.Add("DataId", "3AC985BC-09A2-45EC-B728-0C2E1692A2B4"); //Brand 2
+
+            return Ok(await _repository.Get<DetailPageData>(request));
+        }
 
         /*
         [HttpGet]
