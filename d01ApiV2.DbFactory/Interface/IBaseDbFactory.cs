@@ -16,6 +16,17 @@
         /// <summary>
         /// 
         /// </summary>
+        /// <typeparam name="T1">Response Data</typeparam>
+        /// <typeparam name="T2">Pagination</typeparam>
+        /// <typeparam name="T3">Return Message</typeparam>
+        /// <param name="storedprocedure">stored procedure name</param>
+        /// <param name="parameter">parameters based on the store procedure</param>
+        /// <returns></returns>
+        Task<Tuple<IEnumerable<T1>, T2, T3>> ExecuteQueryPaginationReturnAsync<T1, T2, T3>(string storedprocedure, object parameter);
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="T2"></typeparam>
         /// <typeparam name="T3">Return Message</typeparam>

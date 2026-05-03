@@ -28,6 +28,20 @@ namespace d01ApiV2.Controllers.Profile
 
 
         #region Test
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> PaginateTest()
+        {
+            RequestKeyValue request = new RequestKeyValue();
+
+            request.Parameters.Add("CompanyId", Guid.Empty.ToString());
+            request.Parameters.Add("UserId", Guid.Empty.ToString());
+            request.Parameters.Add("SortBy", "Code");
+
+            return Ok(await _repository.Paginate<ResponseDataGrid>(request));
+        }
+
+
         /*
         [HttpGet]
         [Route("[action]")]

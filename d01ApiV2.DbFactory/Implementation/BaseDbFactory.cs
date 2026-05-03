@@ -36,6 +36,22 @@ namespace d01ApiV2.DbFactory.Implementation
             }
         }
 
+        public async Task<Tuple<IEnumerable<T1>, T2, T3>> ExecuteQueryPaginationReturnAsync<T1, T2, T3>(string storedprocedure, object parameter)
+        {
+            using (var conn = _dbConnection)
+            {
+                using (var multiResult = await conn.QueryMultipleAsync(storedprocedure, parameter, commandType: CommandType.StoredProcedure).ConfigureAwait(false))
+                {
+                    return new Tuple<IEnumerable<T1>, T2, T3>(
+                            await multiResult.ReadAsync<T1>().ConfigureAwait(false),
+                            await multiResult.ReadSingleAsync<T2>().ConfigureAwait(false),
+                            await multiResult.ReadSingleAsync<T3>().ConfigureAwait(false)
+                        );
+
+                }
+            }
+        }
+
         public async Task<Tuple<IEnumerable<T1>, IEnumerable<T2>, T3>> ExecuteQueryGetPageObjectAsync<T1, T2, T3>(string storedprocedure, object parameter)
         {
             using (var conn = _dbConnection)

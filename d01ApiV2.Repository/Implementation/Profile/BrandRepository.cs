@@ -20,7 +20,9 @@ namespace d01ApiV2.Repository.Implementation.Profile
             _appDbFactory = appDbFactory;
         }
 
-        public async Task<ApiResponse<T>> Paginate<T>(RequestKeyValue request)
+        #region comment out
+        /*
+        public async Task<ApiResponse<T>> Paginate_BeforeSplitComponents<T>(RequestKeyValue request)
         {
             var dt = new DataTable();
             dt.Columns.Add("Key", typeof(string));
@@ -181,6 +183,72 @@ namespace d01ApiV2.Repository.Implementation.Profile
                 Data = data,
                 ReturnCode = result.Item4.ReturnCode,
                 ReturnMessage = result.Item4.ReturnMessage
+            };
+
+            return (ApiResponse<T>)(object)resultData;
+        }
+        //*/
+        #endregion comment out
+
+        public async Task<ApiResponse<T>> Paginate<T>(RequestKeyValue request)
+        {
+            int cellNo = 0;
+            var dt = new DataTable();
+            dt.Columns.Add("Key", typeof(string));
+            dt.Columns.Add("Value", typeof(string));
+
+            foreach (var entry in request.Parameters)
+            {
+                dt.Rows.Add(entry.Key, entry.Value);
+            }
+
+            var parameter = new
+            {
+                Parameter = dt.AsTableValuedParameter("dbo.UDTTParameter")
+            };
+
+            var result = await _appDbFactory.ExecuteQueryPaginationReturnAsync<BrandRowDto, PaginationDto, ResultDto>(StoredProcedure.PaginateBrand, parameter).ConfigureAwait(false);
+
+            var dataRowDatas = result.Item1
+                .Select((row, index) =>
+                { 
+                    cellNo = 0;
+                    return new ResponseRow
+                    {
+                        RowNo = index,
+                        Cells = new List<ResponseCell>
+                            {
+                                new ResponseCell { CellNo = cellNo, CellInternalCode = row.CellInternalCode0, CellValue = row.CellValue0 },
+                                new ResponseCell { CellNo = cellNo++, CellInternalCode = row.CellInternalCode1, CellValue = row.CellValue1 },
+                                new ResponseCell { CellNo = cellNo++, CellInternalCode = row.CellInternalCode2, CellValue = row.CellValue2 },
+                                new ResponseCell { CellNo = cellNo++, CellInternalCode = row.CellInternalCode3, CellValue = row.CellValue3 },
+                                new ResponseCell { CellNo = cellNo++, CellInternalCode = row.CellInternalCode4, CellValue = row.CellValue4 },
+                                new ResponseCell { CellNo = cellNo++, CellInternalCode = row.CellInternalCode5, CellValue = row.CellValue5 },
+                                new ResponseCell { CellNo = cellNo++, CellInternalCode = row.CellInternalCode6, CellValue = row.CellValue6 },
+                                new ResponseCell { CellNo = cellNo++, CellInternalCode = row.CellInternalCode7, CellValue = row.CellValue7 },
+                                new ResponseCell { CellNo = cellNo++, CellInternalCode = row.CellInternalCode8, CellValue = row.CellValue8 }
+                            }
+                    };
+                }).ToList();
+
+            var dataPaginationInfo = new ResponsePagination()
+            {
+                CurrentPageNo = result.Item2.CurrentPageNo,
+                CurrentPageSize = result.Item2.CurrentPageSize,
+                RecordCount = result.Item2.RecordCount
+            };
+
+            ResponseDataGrid data = new ResponseDataGrid()
+            {
+                RowList = dataRowDatas,
+                PaginationInfo = dataPaginationInfo
+            };
+
+            ApiResponse<ResponseDataGrid> resultData = new ApiResponse<ResponseDataGrid>
+            {
+                Data = data,
+                ReturnCode = result.Item3.ReturnCode,
+                ReturnMessage = result.Item3.ReturnMessage
             };
 
             return (ApiResponse<T>)(object)resultData;
