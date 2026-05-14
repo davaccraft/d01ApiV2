@@ -21,6 +21,20 @@ namespace d01ApiV2.DbFactory.Implementation
             _dbConnection = new SqlConnection(ConnectionString);
         }
 
+        public async Task<Tuple<T1>> ExecuteQueryReturnAsync<T1>(string storedprocedure, object parameter)
+        {
+            using (var conn = _dbConnection)
+            {
+                using (var singleResult = await conn.QueryMultipleAsync(storedprocedure, parameter, commandType: CommandType.StoredProcedure).ConfigureAwait(false))
+                {
+                    return new Tuple<T1>(
+                            await singleResult.ReadSingleAsync<T1>().ConfigureAwait(false)
+                        );
+
+                }
+            }
+        }
+
         public async Task<Tuple<IEnumerable<T1>, T2>> ExecuteQueryMultipleReturnAsync<T1, T2>(string storedprocedure, object parameter)
         {
             using (var conn = _dbConnection)

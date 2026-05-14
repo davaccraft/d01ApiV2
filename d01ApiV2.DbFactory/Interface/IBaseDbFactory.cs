@@ -2,6 +2,8 @@
 {
     public interface IBaseDbFactory
     {
+        Task<Tuple<T1>> ExecuteQueryReturnAsync<T1>(string storedprocedure, object parameter);
+
         /// <summary>
         /// 
         /// </summary>

@@ -9,6 +9,7 @@ using d01ApiV2.Model.Request;
 using d01ApiV2.Repository.Interface.Profile;
 using Dapper;
 using System.Data;
+using System.Reflection.Metadata;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace d01ApiV2.Repository.Implementation.Profile
@@ -314,24 +315,106 @@ namespace d01ApiV2.Repository.Implementation.Profile
         //Save data
         public async Task<ApiResponse<T>> Save<T>(RequestKeyValue request)
         {
-            throw new NotImplementedException();
+            var dt = new DataTable();
+            var infoTable = new DataTable();
 
+            dt.Columns.Add("Key", typeof(string));
+            dt.Columns.Add("Value", typeof(string));
 
-            //MPD.OPEN
-            //2 tables to received
-            //- Brand
-            //- BrandInfo
+            infoTable.Columns.Add("Id", typeof(Guid));
+            infoTable.Columns.Add("InfoTemplateId", typeof(Guid));
+            infoTable.Columns.Add("Value", typeof(string));
+
+            foreach (var entry in request.Parameters)
+            {
+                //if (entry.Key  == "INFO_MANUFACTURER" || entry.Key == "INFO_BARCODE" || entry.Key == "INFO_LOC")
+                if (entry.Key.StartsWith("INFO_"))
+                {
+
+                    // Split by the delimiter "||"
+                    // Note: StringSplitOptions.None ensures we keep the empty slots for correct indexing
+                    string[] parts = entry.Value.Split(new[] { "||" }, StringSplitOptions.None);
+
+                    // Ensure we have at least 3 parts to avoid IndexOutOfRangeException
+                    if (parts.Length >= 3)
+                    {
+                        // 1. Handle Id (First part)
+                        // If it's blank, we pass DBNull.Value (or Guid.Empty if your DB doesn't allow nulls)
+                        object idValue = string.IsNullOrWhiteSpace(parts[0])
+                            ? (object)DBNull.Value
+                            : Guid.Parse(parts[0]);
+
+                        // 2. Handle InfoTemplateId (Second part)
+                        Guid templateId = Guid.Parse(parts[1]);
+
+                        // 3. Handle Value (Third part)
+                        string infoValue = parts[2];
+
+                        infoTable.Rows.Add(idValue, templateId, infoValue);
+                    }
+                }
+                else
+                    dt.Rows.Add(entry.Key, entry.Value);
+            }
+
+            var parameters = new
+            {
+                // The property names 'Data' and 'InfoData' must match 
+                // the @Data and @InfoData parameters in your SQL procedure.
+                Data = dt.AsTableValuedParameter("[dbo].[UDTTParameter]"),
+                InfoData = infoTable.AsTableValuedParameter("[dbo].[InfoType]")
+            };
+
+            var result = await _appDbFactory.ExecuteQueryReturnAsync<ProfileSaveDto>(StoredProcedure.SaveBrand, parameters).ConfigureAwait(false);
+
+            var responseData = new ProfileSaveData
+            {
+                InternalCode = result.Item1.InternalCode,
+                Value = result.Item1.Value
+            };
+
+            ApiResponse<ProfileSaveData> resultData = new ApiResponse<ProfileSaveData>
+            {
+                Data = responseData,
+                ReturnCode = result.Item1.ReturnCode,
+                ReturnMessage = result.Item1.ReturnMessage
+            };
+
+            return (ApiResponse<T>)(object)resultData;
         }
 
         public async Task<ApiResponse<T>> Delete<T>(RequestKeyValue request)
         {
-            throw new NotImplementedException();
+            var dt = new DataTable();
+            dt.Columns.Add("Key", typeof(string));
+            dt.Columns.Add("Value", typeof(string));
 
+            foreach (var entry in request.Parameters)
+            {
+                dt.Rows.Add(entry.Key, entry.Value);
+            }
 
-            //MPD.OPEN
-            //2 tables to received
-            //- Brand
-            //- BrandInfo
+            var parameter = new
+            {
+                Parameter = dt.AsTableValuedParameter("dbo.UDTTParameter")
+            };
+
+            var result = await _appDbFactory.ExecuteQueryReturnAsync<ProfileSaveDto>(StoredProcedure.DeleteBrand, parameter).ConfigureAwait(false);
+
+            var responseData = new ProfileSaveData
+            {
+                InternalCode = result.Item1.InternalCode,
+                Value = result.Item1.Value
+            };
+
+            ApiResponse<ProfileSaveData> resultData = new ApiResponse<ProfileSaveData>
+            {
+                Data = responseData,
+                ReturnCode = result.Item1.ReturnCode,
+                ReturnMessage = result.Item1.ReturnMessage
+            };
+
+            return (ApiResponse<T>)(object)resultData;
         }
 
         public async Task<ApiResponse<T>> HardDelete<T>(RequestKeyValue request)

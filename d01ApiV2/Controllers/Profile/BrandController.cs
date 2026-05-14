@@ -1,4 +1,5 @@
-﻿using d01ApiV2.Common.Constant;
+﻿using Azure.Core;
+using d01ApiV2.Common.Constant;
 using d01ApiV2.Model.Component;
 using d01ApiV2.Model.Grid;
 using d01ApiV2.Model.Profile;
@@ -54,6 +55,39 @@ namespace d01ApiV2.Controllers.Profile
 
             return Ok(await _repository.Get<DetailPageData>(request));
         }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> SaveDataTest([FromBody] RequestKeyValue request)
+        {
+            //RequestKeyValue request = new RequestKeyValue();
+            //request.Parameters.Add("CompanyId", "B71ECEEE-F966-4AF8-84BD-4C1074449171");
+            //request.Parameters.Add("UserId", Guid.Empty.ToString());
+            //request.Parameters.Add("DataId", "3AC985BC-09A2-45EC-B728-0C2E1692A2B4"); //Brand 2
+            
+            //DetailPageData data = new DetailPageData();
+            //data.Id = Guid.Parse("3AC985BC-09A2-45EC-B728-0C2E1692A2B4");
+            //data.Code = "Brand 2";
+            //data.Description = "Brand 2 Description";
+            //data.IsActive = true;
+
+            return Ok(await _repository.Save<ProfileSaveData>(request));
+        }
+
+
+        //public async Task<IActionResult> DeleteDataTest(RequestKeyValue request)
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> DeleteDataTest([FromBody] RequestKeyValue request)
+        {
+            //RequestKeyValue request = new RequestKeyValue();
+            //request.Parameters.Add("CompanyId", "B71ECEEE-F966-4AF8-84BD-4C1074449171");
+            //request.Parameters.Add("UserId", Guid.Empty.ToString());
+            //request.Parameters.Add("DataId", "3AC985BC-09A2-45EC-B728-0C2E1692A2B4"); //Brand 2
+
+            return Ok(await _repository.Delete<ProfileSaveData>(request));
+        }
+
 
         /*
         [HttpGet]
